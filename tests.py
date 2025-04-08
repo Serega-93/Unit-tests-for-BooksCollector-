@@ -33,11 +33,18 @@ class TestBooksCollector:
         collector.add_new_book(BOOK_NAME[0])
         assert collector.get_book_genre(BOOK_NAME[0]) == ''
 
-    # проверяем получение книги по жанру
-    def test_get_books_with_specific_genre_get_book_by_genre(self, collector):
-        collector.add_new_book(BOOK_NAME[1])
-        collector.set_book_genre(BOOK_NAME[1], GENRE[4])
-        assert  collector.get_books_with_specific_genre(GENRE[4]) == [BOOK_NAME[1]]
+    # Исправлено
+    # проверяем получение книг по жанру
+    def test_get_books_with_specific_genre_get_books_by_genre(self, collector):
+        for i in BOOK_NAME:
+            collector.add_new_book(i)
+        collector.set_book_genre(BOOK_NAME[0], GENRE[0])
+        collector.set_book_genre(BOOK_NAME[1], GENRE[0])
+        collector.set_book_genre(BOOK_NAME[2], GENRE[0])
+        collector.set_book_genre(BOOK_NAME[3], GENRE[3])
+        assert  collector.get_books_with_specific_genre(GENRE[0]) == [BOOK_NAME[0],
+                                                                      BOOK_NAME[1],
+                                                                      BOOK_NAME[2]]
 
     # проверяем возвращение книг подходящих детям
     def test_get_books_for_children_get_books(self, collector):
@@ -60,12 +67,30 @@ class TestBooksCollector:
         collector.delete_book_from_favorites(BOOK_NAME[0])
         assert collector.get_list_of_favorites_books() == []
 
+    # Исправлено
     # проверяем что одна и та же книга не добавляется ещё раз
     def test_add_new_book_add_book_again(self, collector):
         collector.add_new_book(BOOK_NAME[0])
         collector.add_new_book(BOOK_NAME[0])
-        book_list = collector.get_books_genre()
-        assert  len(book_list) == 1
+        assert collector.get_books_genre() == {BOOK_NAME[0]: ''}
+
+
+    # Доработки по ревью
+    # получение жанра книги по имени
+    def test_get_book_genre_get_book(self, collector):
+        collector.add_new_book(BOOK_NAME[1])
+        collector.set_book_genre(BOOK_NAME[1], GENRE[2])
+        assert collector.get_book_genre(BOOK_NAME[1]) == GENRE[2]
+
+    # получение списка избранных книг
+    def test_get_list_of_favorites_books_get_favorites_books(self, collector):
+        favorite_books = []
+        for i in BOOK_NAME:
+            collector.add_new_book(i)
+            collector.add_book_in_favorites(i)
+            favorite_books.append(i)
+        assert collector.get_list_of_favorites_books() == favorite_books
+
 
 
 
