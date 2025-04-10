@@ -33,7 +33,6 @@ class TestBooksCollector:
         collector.add_new_book(BOOK_NAME[0])
         assert collector.get_book_genre(BOOK_NAME[0]) == ''
 
-    # Исправлено
     # проверяем получение книг по жанру
     def test_get_books_with_specific_genre_get_books_by_genre(self, collector):
         for i in BOOK_NAME:
@@ -54,11 +53,12 @@ class TestBooksCollector:
         collector.set_book_genre(BOOK_NAME[2], GENRE[1])
         assert  collector.get_books_for_children() == [BOOK_NAME[3]]
 
+    # Исправлено
     # проверяем добавление книги в избранное
     def test_add_book_in_favorites_add_book(self, collector):
         collector.add_new_book(BOOK_NAME[0])
         collector.add_book_in_favorites(BOOK_NAME[0])
-        assert collector.get_list_of_favorites_books() == [BOOK_NAME[0]]
+        assert BOOK_NAME[0] in collector.get_list_of_favorites_books()
 
     # проверяем удаление книги из избранного
     def test_delete_book_from_favorites_delete_book(self, collector):
@@ -67,7 +67,6 @@ class TestBooksCollector:
         collector.delete_book_from_favorites(BOOK_NAME[0])
         assert collector.get_list_of_favorites_books() == []
 
-    # Исправлено
     # проверяем что одна и та же книга не добавляется ещё раз
     def test_add_new_book_add_book_again(self, collector):
         collector.add_new_book(BOOK_NAME[0])
@@ -75,12 +74,13 @@ class TestBooksCollector:
         assert collector.get_books_genre() == {BOOK_NAME[0]: ''}
 
 
-    # Доработки по ревью
-    # получение жанра книги по имени
-    def test_get_book_genre_get_book(self, collector):
+    # Исправлено
+    # метод возвращает жанр для этой книги в списке
+    def test_get_book_genre_return_genre(self, collector):
         collector.add_new_book(BOOK_NAME[1])
         collector.set_book_genre(BOOK_NAME[1], GENRE[2])
-        assert collector.get_book_genre(BOOK_NAME[1]) == GENRE[2]
+        genre = collector.get_book_genre(BOOK_NAME[1])
+        assert collector.get_books_genre() == {BOOK_NAME[1]: genre}
 
     # получение списка избранных книг
     def test_get_list_of_favorites_books_get_favorites_books(self, collector):
